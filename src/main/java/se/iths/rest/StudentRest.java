@@ -40,6 +40,11 @@ public class StudentRest {
         String newStudentEmail = student.getEmail();
         List<Student> existingEmails = studentService.getStudentEmails();
 
+        if(student.getFirstName() == null || student.getLastName()==null || student.getEmail()==null){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
+                    .entity("value for 'firstName', 'lastName' and 'email' can not be excluded")
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+        }
             if(existingEmails.contains(newStudentEmail)){
             throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
                         .entity("This email already exists, please try different email or the student is already registered")
@@ -69,6 +74,11 @@ public class StudentRest {
         if(!studentService.getStudentIDs().contains(student.getId())){
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                     .entity("no student with this id found").type(MediaType.TEXT_PLAIN_TYPE).build());
+        }
+        if(student.getFirstName() == null || student.getLastName()==null || student.getEmail()==null){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
+                    .entity("value for 'firstName', 'lastName' and 'email' can not be excluded")
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
         }
         studentService.updateStudent(student);
         return Response.ok(student).build();
