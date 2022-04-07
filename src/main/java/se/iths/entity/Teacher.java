@@ -1,18 +1,15 @@
 package se.iths.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import javax.json.bind.annotation.JsonbTransient;
+import javax.json.bind.annotation.JsonbTypeDeserializer;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Student {
-
+public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -25,16 +22,14 @@ public class Student {
     private String email;
     private String phoneNumber;
 
-    @ManyToMany
-    //@JsonBackReference
-    //@JsonIgnoreProperties("students")
-    //@JsonIgnoreProperties(ignoreUnknown = true)
+    @OneToMany
+    @JsonbTransient
     private List<Subject> subjects = new ArrayList<>();
 
-    public Student() {
+    public Teacher() {
     }
 
-    public Student(String firstName, String lastName, String email, String phoneNumber) {
+    public Teacher(String firstName, String lastName, String email, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

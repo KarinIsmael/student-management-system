@@ -22,7 +22,6 @@ public class StudentRest {
         this.studentService = studentService;
     }
 
-    @Path("")
     @GET
     public Response getAllStudents(){
         List<Student> foundStudents = studentService.getAllStudents();
@@ -33,7 +32,7 @@ public class StudentRest {
         return Response.ok(foundStudents).build(); 
     }
 
-    @Path("")
+
     @POST
     public Response createStudent(Student student){
 
@@ -68,7 +67,7 @@ public class StudentRest {
         return Response.ok().build();
     }
 
-    @Path("")
+
     @PUT
     public Response updateStudent(Student student){
         if(!studentService.getStudentIDs().contains(student.getId())){
@@ -91,6 +90,7 @@ public class StudentRest {
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                     .entity("no student with this id found").type(MediaType.TEXT_PLAIN_TYPE).build());
         }
+
         Student updatedStudent = studentService.updateName(id, student.getFirstName(), student.getLastName());
         return Response.ok(updatedStudent).build();
     }
