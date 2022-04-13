@@ -1,6 +1,7 @@
 package se.iths.rest;
 
 import se.iths.entity.Student;
+import se.iths.entity.Subject;
 import se.iths.entity.Teacher;
 import se.iths.service.TeacherService;
 
@@ -39,13 +40,25 @@ public class TeacherRest {
                     .type(MediaType.TEXT_PLAIN_TYPE).build());
         }
         teacherService.createTeacher(teacher);
-        return Response.ok().build();
+        return Response.ok(teacher).build();
     }
 
     @GET
     public Response getAllTeachers(){
         List<Teacher> foundTeachers = teacherService.getAllTeachers();
         return Response.ok(foundTeachers).build();
+    }
+
+    @Path("{id}")
+    @GET
+    public Response getTeacherById(@PathParam("id") Long id){
+        if(!teacherService.getTeacherIDs().contains(id)){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("There is no teacher with this id")
+                    .type(MediaType.APPLICATION_JSON_TYPE).build());
+        }
+        Teacher foundTeacher = teacherService.findTeacherById(id);
+        return Response.ok(foundTeacher).build();
     }
 
     @Path("{id}")

@@ -1,5 +1,16 @@
-Root-Endpoint: http://localhost:8080/student-management-system/api/v1/student
+Root-Endpoints: 
+http://localhost:8080/student-management-system/api/v1/student
+http://localhost:8080/student-management-system/api/v1/subject
+http://localhost:8080/student-management-system/api/v1/teacher
 
+**h2-Console**
+Address: http://localhost:8080/student-management-system/h2
+JDBC-URL: jdbc:h2:mem:s-m-s
+Username: sa
+Password: sa
+--------------------------------------------------------------
+
+STUDENT
 **Endpoints:**
 GET(allStudents): ""
 GET (bylastname) QUERY: /getbylastname
@@ -7,12 +18,6 @@ POST: ""
 DELETE: /{id}
 PUT: ""
 PATCH: /{id}
-
-**h2-Console**
-Address: http://localhost:8080/student-management-system/h2
-JDBC-URL: jdbc:h2:mem:s-m-s
-Username: sa
-Password: sa
 
 **Example-POST**
 JSON-body: 
@@ -43,3 +48,34 @@ JSON-body:
 **Example-QUERY**
 name: "lastName"
 value: "ismael"
+--------------------------------------------------------------
+
+SUBJECT
+**Endpoints:**
+GET(allSubjects): ""
+GET (byid): /{id} 
+POST: ""
+DELETE: /{id}
+
+**Example-POST**
+JSON-body:
+{
+"name" :"Math"
+}
+----------------------------------------------------------------
+
+TEACHER
+**Endpoints:**
+GET(allTeachers): ""
+GET (byid): /{id}
+POST: ""
+DELETE: /{id}
+
+**Example-POST**
+JSON-body:
+{
+"firstName" :"bettan",
+"lastName" :"bettsson",
+"email" :"bettan@bettsson.com",
+"phoneNumber" : "0104378"
+}

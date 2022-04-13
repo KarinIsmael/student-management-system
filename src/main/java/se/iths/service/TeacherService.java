@@ -1,5 +1,6 @@
 package se.iths.service;
 
+import se.iths.entity.Subject;
 import se.iths.entity.Teacher;
 
 import javax.persistence.EntityManager;
@@ -25,6 +26,10 @@ public class TeacherService {
 
     public void deleteTeacher(Long id){
         Teacher foundTeacher = entityManager.find(Teacher.class, id);
+
+        for (Subject subject: foundTeacher.getSubjects()){
+            subject.removeTeacherFromSubject(foundTeacher);
+        }
         entityManager.remove(foundTeacher);
     }
 
@@ -36,5 +41,10 @@ public class TeacherService {
     public List<Teacher> getTeacherIDs() {
         return entityManager.createQuery("SELECT i.id FROM Teacher i", Teacher.class)
                 .getResultList();
+    }
+    public Teacher findTeacherById(Long id) {
+        String query = "SELECT i FROM Teacher i WHERE i.id = :id";
+        return entityManager.createQuery(query, Teacher.class)
+                .setParameter("id", id).getSingleResult();
     }
 }

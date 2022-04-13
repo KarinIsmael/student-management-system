@@ -1,6 +1,7 @@
 package se.iths.service;
 
 import se.iths.entity.Student;
+import se.iths.entity.Subject;
 
 import javax.mail.FetchProfile;
 import javax.persistence.EntityManager;
@@ -38,6 +39,10 @@ public class StudentService {
 
     public void deleteStudent(Long id){
         Student foundStudent = entityManager.find(Student.class, id);
+        for (Subject subject: foundStudent.getSubjects()){
+            subject.removeStudentFromSubject(foundStudent);
+            //foundStudent.removeSubjectFromStudent(subject);
+        }
         entityManager.remove(foundStudent);
     }
 
@@ -54,7 +59,8 @@ public class StudentService {
 
     public Student getByLastNameNamedParameter(String lastName){
         String query = "SELECT i FROM Student i WHERE i.lastName = :lastName";
-        return entityManager.createQuery(query, Student.class).setParameter("lastName", lastName).getSingleResult();
+        return entityManager.createQuery(query, Student.class)
+                .setParameter("lastName", lastName).getSingleResult();
     }
 
 }

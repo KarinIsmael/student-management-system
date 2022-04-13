@@ -83,4 +83,13 @@ public class Teacher {
     public void setSubjects(List<Subject> subjects) {
         this.subjects = subjects;
     }
+
+    public void removeSubjectFromTeacher(Subject subject) {
+        boolean remove = subjects.remove(subject);
+        if(remove){
+            subject.getTeacher();
+        }
+
+        //subjects.remove(subject);
+    }
 }

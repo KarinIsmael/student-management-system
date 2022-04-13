@@ -3,6 +3,7 @@ package se.iths.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -29,6 +30,7 @@ public class Student {
     //@JsonBackReference
     //@JsonIgnoreProperties("students")
     //@JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonbTransient
     private List<Subject> subjects = new ArrayList<>();
 
     public Student() {
@@ -88,4 +90,11 @@ public class Student {
     public void setSubjects(List<Subject> subjects) {
         this.subjects = subjects;
     }
+
+     public void removeSubjectFromStudent(Subject subject) {
+    boolean remove = subjects.remove(subject);
+    if (remove) {
+        subject.getStudents().remove(this);
+    }
+}
 }

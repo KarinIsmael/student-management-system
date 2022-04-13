@@ -39,7 +39,7 @@ public class SubjectRest {
         }
 
         subjectService.createSubject(subject);
-        return Response.ok().build();
+        return Response.ok(subject).build();
     }
 
 
@@ -47,6 +47,18 @@ public class SubjectRest {
     public Response getAllSubjects(){
         List<Subject> foundSubjects = subjectService.getAllSubjects();
         return Response.ok(foundSubjects).build();
+    }
+
+    @Path("{id}")
+    @GET
+    public Response getSubjectById(@PathParam("id") Long id){
+        if(!subjectService.getSubjectIDs().contains(id)){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("There is no subject with this id")
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+        }
+        Subject foundSubject = subjectService.findSubjectById(id);
+        return Response.ok(foundSubject).build();
     }
 
    /* @Path("addstudenttosubject/{id}")
