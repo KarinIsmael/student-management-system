@@ -52,9 +52,9 @@ public class StudentService {
         return foundStudent;
     }
 
-    public Student getByLastNameNamedParameter(String lastName){
+    public List<Student> getByLastNameNamedParameter(String lastName){
         String query = "SELECT i FROM Student i WHERE i.lastName = :lastName";
-        return entityManager.createQuery(query, Student.class).setParameter("lastName", lastName).getSingleResult();
+        return entityManager.createQuery(query, Student.class).setParameter("lastName", lastName).getResultList();
     }
 
 }

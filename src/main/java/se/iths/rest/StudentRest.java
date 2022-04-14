@@ -103,7 +103,7 @@ public class StudentRest {
                         .entity("There is no student with this lastname")
                     .type(MediaType.TEXT_PLAIN_TYPE).build());
         }
-        Student foundstudent = studentService.getByLastNameNamedParameter(lastName);
-        return Response.ok(foundstudent).build();
+        List<Student> foundstudents = studentService.getByLastNameNamedParameter(lastName);
+        return Response.ok(foundstudents).build();
     }
 }
