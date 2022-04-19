@@ -1,12 +1,7 @@
 package se.iths.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,21 +14,11 @@ public class Subject{
     @NotEmpty
     private String name;
 
-    @ManyToMany()
-    //@JsonManagedReference
-    //@JsonIgnoreProperties("subjects")
-    //@JsonIgnoreProperties(ignoreUnknown = true)
-    //@JsonbTransient
+    @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     public List<Student> students = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Teacher teacher;
-
-    /*Om subject har en elev kopplad till sig så kan man ta bort subject
-     * utan att eleven försvinner och man får inte error.
-     * Däremot om subject har en lärare kopplad till sig så går det inte att ta bort subject
-     * utan att få error. Men går det inte heller att ta bort läraren utan att få error, hur
-     * får bort kopplingen mellan subject och teacher?*/
 
     public Subject() {
     }
@@ -84,9 +69,5 @@ public class Subject{
         if (remove) {
             student.getSubjects().remove(this);
         }
-    }
-
-    public void removeTeacherFromSubject(Teacher teacher){
-        teacher.getSubjects().remove(this);
     }
 }

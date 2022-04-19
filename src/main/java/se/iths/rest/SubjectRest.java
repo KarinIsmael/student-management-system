@@ -1,16 +1,13 @@
 package se.iths.rest;
 
-import se.iths.entity.Student;
 import se.iths.entity.Subject;
 import se.iths.entity.Teacher;
 import se.iths.service.SubjectService;
 
 import javax.inject.Inject;
-import javax.json.JsonException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("subject")
@@ -61,20 +58,20 @@ public class SubjectRest {
         return Response.ok(foundSubject).build();
     }
 
-   /* @Path("addstudenttosubject/{id}")
-    @PATCH
-    public Response addStudentToSubject(@PathParam("id") Long id, Long studentId){
-
-        Subject updatedSubject = subjectService.addStudentToSubject(id, studentId);
-
-        return Response.ok(updatedSubject).build();
-    }*/
-
-    @Path("addstudenttosubject/{id}")
+    /* @Path("addstudenttosubject/{id}")
     @POST
     public Response addStudentToSubject(@PathParam("id") Long id, Student student){
 
         subjectService.addStudentToSubject(id, student.getId());
+
+        return Response.ok().build();
+    }*/
+
+    @Path("/{subjectid}/student/{studentid}")
+    @PUT
+    public Response addStudentToSubject(@PathParam("subjectid") Long subjectid, @PathParam("studentid") Long studentid){
+
+        subjectService.addStudentToSubject(subjectid, studentid);
 
         return Response.ok().build();
     }
@@ -85,8 +82,6 @@ public class SubjectRest {
 
         subjectService.addTeacherToSubject(id, teacher.getId());
 
-        //Teacher foundTeacher = subjectService.findTeacherById(teacherId);
-        //subjectService.addTeacherToSubject(id, id);
         return Response.ok().build();
     }
 

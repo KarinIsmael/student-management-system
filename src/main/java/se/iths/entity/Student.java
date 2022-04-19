@@ -1,13 +1,9 @@
 package se.iths.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +22,8 @@ public class Student {
     private String email;
     private String phoneNumber;
 
-    @ManyToMany
-    //@JsonBackReference
-    //@JsonIgnoreProperties("students")
-    //@JsonIgnoreProperties(ignoreUnknown = true)
     @JsonbTransient
+    @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Subject> subjects = new ArrayList<>();
 
     public Student() {
@@ -91,10 +84,10 @@ public class Student {
         this.subjects = subjects;
     }
 
-     public void removeSubjectFromStudent(Subject subject) {
-    boolean remove = subjects.remove(subject);
-    if (remove) {
-        subject.getStudents().remove(this);
+    public void removeSubjectFromStudent(Subject subject) {
+        boolean remove = subjects.remove(subject);
+        if (remove) {
+            subject.getStudents().remove(this);
+        }
     }
-}
 }

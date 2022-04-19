@@ -1,7 +1,6 @@
 package se.iths.entity;
 
 import javax.json.bind.annotation.JsonbTransient;
-import javax.json.bind.annotation.JsonbTypeDeserializer;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -22,8 +21,8 @@ public class Teacher {
     private String email;
     private String phoneNumber;
 
-    @OneToMany
     @JsonbTransient
+    @OneToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Subject> subjects = new ArrayList<>();
 
     public Teacher() {
@@ -84,12 +83,14 @@ public class Teacher {
         this.subjects = subjects;
     }
 
-    public void removeSubjectFromTeacher(Subject subject) {
-        boolean remove = subjects.remove(subject);
-        if(remove){
-            subject.getTeacher();
-        }
+    public void addSubjectToTeacher(Subject subject){
+        subject.setTeacher(this);
+        subjects.add(subject);
+    }
 
-        //subjects.remove(subject);
+    public void removeSubjectFromTeacher(Subject subject) {
+        subjects.remove(subject);
+        subject.setTeacher(null);
+
     }
 }

@@ -7,10 +7,6 @@ import se.iths.entity.Teacher;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.Collection;
 import java.util.List;
 
 @Transactional
@@ -34,7 +30,6 @@ public class SubjectService {
         Student foundStudent = entityManager.find(Student.class, studentId);
         foundSubject.getStudents().add(foundStudent);
         foundStudent.getSubjects().add(foundSubject);
-        //return foundSubject;
     }
 
     public Teacher findTeacherById(Long teacherId){
@@ -52,23 +47,21 @@ public class SubjectService {
     public void deleteSubject(Long id){
         Subject foundSubject = entityManager.find(Subject.class, id);
 
-        for (Student student: foundSubject.getStudents()){
-            student.removeSubjectFromStudent(foundSubject);
-            //foundSubject.removeStudentFromSubject(student);
-            //student.removeSubjectFromStudent(foundSubject);
-        }
+        List<Student> foundStudents = foundSubject.getStudents();
 
-        /*if(!foundSubject.getStudents().isEmpty()){
+        for (Student student: foundStudents){
+            student.removeSubjectFromStudent(foundSubject);
+        }
+        entityManager.remove(foundSubject);
+
+       /* if(!foundSubject.getStudents().isEmpty()){
             throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
                     .entity("This subject has registered students")
                     .type(MediaType.TEXT_PLAIN_TYPE).build());
-        }*/
-        //foundSubject.students.clear();
-        //entityManager.refresh(foundSubject);
-        //foundSubject.setTea;
+        }
 
-        foundSubject.getTeacher().removeSubjectFromTeacher(foundSubject);
-        entityManager.remove(foundSubject);
+        foundSubject.getTeacher().removeSubjectFromTeacher(foundSubject);*/
+
     }
 
     public List<Subject> getSubjectIDs() {

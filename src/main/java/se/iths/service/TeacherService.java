@@ -6,7 +6,6 @@ import se.iths.entity.Teacher;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 
 @Transactional
@@ -28,7 +27,7 @@ public class TeacherService {
         Teacher foundTeacher = entityManager.find(Teacher.class, id);
 
         for (Subject subject: foundTeacher.getSubjects()){
-            subject.removeTeacherFromSubject(foundTeacher);
+            foundTeacher.removeSubjectFromTeacher(subject);
         }
         entityManager.remove(foundTeacher);
     }

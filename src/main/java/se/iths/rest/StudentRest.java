@@ -8,7 +8,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.Objects;
 
 @Path("student")
 @Produces(MediaType.APPLICATION_JSON)
@@ -45,9 +44,12 @@ public class StudentRest {
                     .type(MediaType.TEXT_PLAIN_TYPE).build());
         }
             if(existingEmails.contains(newStudentEmail)){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
+
+                throw new ExceptionHandler("email exists");
+
+            /*throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
                         .entity("This email already exists, please try different email or the student is already registered")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());*/
         }
 
 
