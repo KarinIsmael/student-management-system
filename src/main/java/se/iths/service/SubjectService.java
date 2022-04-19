@@ -3,6 +3,7 @@ package se.iths.service;
 import se.iths.entity.Student;
 import se.iths.entity.Subject;
 import se.iths.entity.Teacher;
+import se.iths.rest.ExceptionHandler;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -40,6 +41,10 @@ public class SubjectService {
     public void addTeacherToSubject(Long subjectId, Long teacherId){
         Subject foundSubject = entityManager.find(Subject.class, subjectId);
         Teacher foundTeacher = entityManager.find(Teacher.class, teacherId);
+
+        if(foundTeacher==null){
+            throw new ExceptionHandler("Cannot find Teacher with such ID");
+        }
         foundSubject.setTeacher(foundTeacher);
        foundTeacher.getSubjects().add(foundSubject);
     }
@@ -47,25 +52,28 @@ public class SubjectService {
     public void deleteSubject(Long id){
         Subject foundSubject = entityManager.find(Subject.class, id);
 
-        List<Student> foundStudents = foundSubject.getStudents();
-
-        for (Student student: foundStudents){
+        for (Student student: foundSubject.getStudents()){
             student.removeSubjectFromStudent(foundSubject);
         }
         entityManager.remove(foundSubject);
 
        /* if(!foundSubject.getStudents().isEmpty()){
-            throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
-                    .entity("This subject has registered students")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
-        }
+            throw new ExceptionHandler("This subject has registered students");
+        }*/
 
-        foundSubject.getTeacher().removeSubjectFromTeacher(foundSubject);*/
+        if(foundSubject.getTeacher() != null){
+            foundSubject.getTeacher().removeSubjectFromTeacher(foundSubject);
+        }
 
     }
 
     public List<Subject> getSubjectIDs() {
         return entityManager.createQuery("SELECT i.id FROM Subject i", Subject.class)
+                .getResultList();
+    }
+
+    public List<Student> getStudentIDs() {
+        return entityManager.createQuery("SELECT i.id FROM Student i", Student.class)
                 .getResultList();
     }
 

@@ -25,8 +25,7 @@ public class StudentRest {
     public Response getAllStudents(){
         List<Student> foundStudents = studentService.getAllStudents();
         if(foundStudents.isEmpty()){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("no students found").type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("no students found");
         }
         return Response.ok(foundStudents).build(); 
     }
@@ -39,22 +38,12 @@ public class StudentRest {
         List<Student> existingEmails = studentService.getStudentEmails();
 
         if(student.getFirstName() == null || student.getLastName()==null || student.getEmail()==null){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
-                    .entity("value for 'firstName', 'lastName' and 'email' can not be excluded")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("value for 'firstName', 'lastName' and 'email' can not be excluded");
         }
             if(existingEmails.contains(newStudentEmail)){
-
-                throw new ExceptionHandler("email exists");
-
-            /*throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
-                        .entity("This email already exists, please try different email or the student is already registered")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());*/
+                throw new ExceptionHandler("This email already exists, please try different email or the student is already registered");
         }
-
-
          studentService.createStudent(student);
-
         return Response.ok(student).build();
     }
 
@@ -62,8 +51,7 @@ public class StudentRest {
     @DELETE
     public Response deleteStudent(@PathParam("id")Long id){
         if(!studentService.getStudentIDs().contains(id)){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("no student with this id found").type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("no student with this id found");
         }
         studentService.deleteStudent(id);
         return Response.ok().build();
@@ -73,13 +61,10 @@ public class StudentRest {
     @PUT
     public Response updateStudent(Student student){
         if(!studentService.getStudentIDs().contains(student.getId())){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("no student with this id found").type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("no student with this id found");
         }
         if(student.getFirstName() == null || student.getLastName()==null || student.getEmail()==null){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
-                    .entity("value for 'firstName', 'lastName' and 'email' can not be excluded")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("value for 'firstName', 'lastName' and 'email' can not be excluded");
         }
         studentService.updateStudent(student);
         return Response.ok(student).build();
@@ -89,8 +74,7 @@ public class StudentRest {
     @PATCH
     public Response partialStudentUpdate(@PathParam("id") Long id, Student student){
         if(!studentService.getStudentIDs().contains(id)){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("no student with this id found").type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("no student with this id found");
         }
 
         Student updatedStudent = studentService.updateName(id, student.getFirstName(), student.getLastName());
@@ -101,9 +85,7 @@ public class StudentRest {
     @GET
     public Response getByLastName(@QueryParam("lastName")String lastName){
         if(!studentService.getStudentLastNames().contains(lastName)){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                        .entity("There is no student with this lastname")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("There is no student with this lastname");
         }
         Student foundstudent = studentService.getByLastNameNamedParameter(lastName);
         return Response.ok(foundstudent).build();

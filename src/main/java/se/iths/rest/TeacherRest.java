@@ -1,7 +1,5 @@
 package se.iths.rest;
 
-import se.iths.entity.Student;
-import se.iths.entity.Subject;
 import se.iths.entity.Teacher;
 import se.iths.service.TeacherService;
 
@@ -30,14 +28,10 @@ public class TeacherRest {
         List<Teacher> existingEmails = teacherService.getTeacherEmails();
 
         if(teacher.getFirstName() == null || teacher.getLastName()==null || teacher.getEmail()==null){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
-                    .entity("value for 'firstName', 'lastName' and 'email' can not be excluded")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("value for 'firstName', 'lastName' and 'email' can not be excluded");
         }
         if(existingEmails.contains(newTeacherEmail)){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
-                    .entity("This email already exists, please try different email or the teacher is already registered")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("This email already exists, please try different email or the teacher is already registered");
         }
         teacherService.createTeacher(teacher);
         return Response.ok(teacher).build();
@@ -53,9 +47,7 @@ public class TeacherRest {
     @GET
     public Response getTeacherById(@PathParam("id") Long id){
         if(!teacherService.getTeacherIDs().contains(id)){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("There is no teacher with this id")
-                    .type(MediaType.APPLICATION_JSON_TYPE).build());
+            throw new ExceptionHandler("There is no teacher with this id");
         }
         Teacher foundTeacher = teacherService.findTeacherById(id);
         return Response.ok(foundTeacher).build();
@@ -65,8 +57,7 @@ public class TeacherRest {
     @DELETE
     public Response deleteTeacher(@PathParam("id") Long id){
         if(!teacherService.getTeacherIDs().contains(id)){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("no teacher with this id found").type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("There is no teacher with this id");
         }
         teacherService.deleteTeacher(id);
         return Response.ok().build();

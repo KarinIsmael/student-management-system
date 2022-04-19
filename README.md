@@ -1,3 +1,5 @@
+Pre-requirements: Configure Payara Server for project with Java 17, payara 5 and artifact war for deployment.
+
 Root-Endpoints: 
 http://localhost:8080/student-management-system/api/v1/student
 http://localhost:8080/student-management-system/api/v1/subject
@@ -48,6 +50,10 @@ JSON-body:
 **Example-QUERY**
 name: "lastName"
 value: "ismael"
+
+**Add Student to Subject (existing student and subject)**
+PUT
+http://localhost:8080/student-management-system/api/v1/subject/{SUBJECTID}/student/{STUDENTID}
 --------------------------------------------------------------
 
 SUBJECT
@@ -78,4 +84,12 @@ JSON-body:
 "lastName" :"bettsson",
 "email" :"bettan@bettsson.com",
 "phoneNumber" : "0104378"
+}
+
+**Add Teacher to Subject (existing subject and teacher)**
+POST
+http://localhost:8080/student-management-system/api/v1/subject/addteachertosubject/{SUBJECTID}
+JSON-body
+{
+"id": {teacherid}
 }

@@ -30,11 +30,8 @@ public class SubjectRest {
         List<Subject> existingSubjectNames = subjectService.getSubjectNames();
 
         if(existingSubjectNames.contains(newSubjectName)){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_ACCEPTABLE)
-                    .entity("This subject-name already exists, system does not allow duplicate subjects.")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("This subject-name already exists, system does not allow duplicate subjects.");
         }
-
         subjectService.createSubject(subject);
         return Response.ok(subject).build();
     }
@@ -50,27 +47,19 @@ public class SubjectRest {
     @GET
     public Response getSubjectById(@PathParam("id") Long id){
         if(!subjectService.getSubjectIDs().contains(id)){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("There is no subject with this id")
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("There is no subject with this id");
         }
         Subject foundSubject = subjectService.findSubjectById(id);
         return Response.ok(foundSubject).build();
     }
 
-    /* @Path("addstudenttosubject/{id}")
-    @POST
-    public Response addStudentToSubject(@PathParam("id") Long id, Student student){
-
-        subjectService.addStudentToSubject(id, student.getId());
-
-        return Response.ok().build();
-    }*/
-
     @Path("/{subjectid}/student/{studentid}")
     @PUT
     public Response addStudentToSubject(@PathParam("subjectid") Long subjectid, @PathParam("studentid") Long studentid){
 
+        if(!subjectService.getSubjectIDs().contains(subjectid) || !subjectService.getStudentIDs().contains(studentid)){
+            throw new ExceptionHandler("Check the entered ID values, one or both do not exist in the system");
+        }
         subjectService.addStudentToSubject(subjectid, studentid);
 
         return Response.ok().build();
@@ -80,6 +69,9 @@ public class SubjectRest {
     @POST
     public Response addTeacherToSubject(@PathParam("id") Long id, Teacher teacher){
 
+        if(!subjectService.getSubjectIDs().contains(id)){
+            throw new ExceptionHandler("Check the entered ID values, Subject does not exist in the system");
+        }
         subjectService.addTeacherToSubject(id, teacher.getId());
 
         return Response.ok().build();
@@ -89,8 +81,7 @@ public class SubjectRest {
     @DELETE
     public Response deleteSubject(@PathParam("id")Long id){
         if(!subjectService.getSubjectIDs().contains(id)){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("no subject with this id found").type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new ExceptionHandler("no subject with this id found");
         }
         subjectService.deleteSubject(id);
         return Response.ok().build();

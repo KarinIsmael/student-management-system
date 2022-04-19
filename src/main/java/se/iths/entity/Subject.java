@@ -2,8 +2,8 @@ package se.iths.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Subject{
@@ -15,7 +15,7 @@ public class Subject{
     private String name;
 
     @ManyToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    public List<Student> students = new ArrayList<>();
+    public Set<Student> students = new HashSet<>();
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Teacher teacher;
@@ -48,11 +48,11 @@ public class Subject{
         this.name = name;
     }
 
-    public List<Student> getStudents() {
+    public Set<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
+    public void setStudents(Set<Student> students) {
         this.students = students;
     }
 
