@@ -23,6 +23,7 @@ public class StudentService {
         return entityManager.createQuery("SELECT i.email FROM Student i", Student.class)
                 .getResultList();
     }
+
     public List<Student> getStudentLastNames(){
         return entityManager.createQuery("SELECT i.lastName FROM Student i", Student.class)
                 .getResultList();

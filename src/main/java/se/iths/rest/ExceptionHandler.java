@@ -8,7 +8,7 @@ public class ExceptionHandler extends WebApplicationException{
 
     public ExceptionHandler(String message){
         super (Response.status(Response.Status.NOT_FOUND)
-                .entity("Operation did not work: " + message)
-                .type(MediaType.TEXT_PLAIN_TYPE).build());
+                .entity(new ErrorMessage("Operation did not work: " + message))
+                .type(MediaType.APPLICATION_JSON).build());
     }
 }
